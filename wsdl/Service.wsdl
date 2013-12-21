@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" 
+				  xmlns:tns="http://schedule-manager.jit.su/" 
+				  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+				  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+				  xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/"
+				  xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+				  xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/"
+				  xmlns:soap12="http://www.w3.org/2003/05/soap-envelope"
+				  targetNamespace="http://schedule-manager.jit.su/">
+        <wsdl:types>
+            <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+						attributeFormDefault="qualified"
+						elementFormDefault="qualified"
+						targetNamespace="http://schedule-manager.jit.su/">
+
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="SMHeader">
+                    <xs:sequence>
+                        <xs:element minOccurs="1" maxOccurs="1" name="sessionId" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="User">
+                    <xs:sequence>
+                        <xs:element minOccurs="0" maxOccurs="1" name="_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="1" name="firstName" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="1" name="lastName" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="1" name="birthDay" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="1" name="degree" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="1" name="universityName" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="1" name="groupNumber" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="1" name="personalId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="1" name="userGroup" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="Course">
+                    <xs:sequence>
+                        <xs:element minOccurs="0" maxOccurs="1" name="_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="1" name="status" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="1" name="title" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="1" name="field" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="1" name="description" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="unbounded" name="keyWords" type="xs:string" /> 
+                        <xs:element minOccurs="0" maxOccurs="1" name="professor" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" maxOccurs="unbounded" name="students" type="xs:string" />
+                        <xs:element minOccurs="0" maxOccurs="1" name="startDate" type="xs:string" />
+                        <xs:element minOccurs="0" maxOccurs="1" name="finishDate" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+
+                <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="State">
+                    <xs:sequence>
+                        <xs:element minOccurs="0" maxOccurs="1" name="statusCode" type="xs:int"/>
+                        <xs:element minOccurs="0" maxOccurs="unbounded" name="errors" type="xs:string" /> 
+                    </xs:sequence>
+                </xs:complexType>
+
+                <!-- Get courses -->
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="GetCoursesRequest">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="header" type="tns:SMHeader" nillable="true" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="GetCoursesResponse">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="state" type="tns:State" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="courses" type="tns:Course" minOccurs="0" nillable="true" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <!-- Update course -->
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="UpdateCourseRequest">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="header" type="tns:SMHeader" nillable="true" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="course" type="tns:Course" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="UpdateCourseResponse">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="state" type="tns:State" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <!-- Create course -->
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="CreateCourseRequest">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="header" type="tns:SMHeader" nillable="true" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="course" type="tns:Course" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="CreateCourseResponse">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="state" type="tns:State" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <!-- Delete course -->
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="DeleteCourseByIdRequest">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="header" type="tns:SMHeader" nillable="true" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="courseId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="DeleteCourseByIdResponse">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="state" type="tns:State" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <!-- Subscribe for course -->
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="SubscribeCourseByIdRequest">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="header" type="tns:SMHeader" nillable="true" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="courseId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="userId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="SubscribeCourseByIdResponse">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="state" type="tns:State" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <!-- Unsubscribe for course -->
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="UnsubscribeCourseByIdRequest">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="header" type="tns:SMHeader" nillable="true" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="courseId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="userId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="UnsubscribeCourseByIdResponse">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="state" type="tns:State" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <!-- Get students -->
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="GetStudentsRequest">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="header" type="tns:SMHeader" nillable="true" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="GetStudentsResponse">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="state" type="tns:State" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="users" type="tns:User" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <!-- Get user by id -->
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="GetUserByIdRequest">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="header" type="tns:SMHeader" nillable="true" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="userId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="GetUserByIdResponse">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="state" type="tns:State" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="user" type="tns:User" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <!-- Auth user -->
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="AuthUserRequest">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="username" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="password" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="AuthUserResponse">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="state" type="tns:State" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="header" type="tns:SMHeader" nillable="true" minOccurs="1" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xsd:schema>
+        </wsdl:types>
+
+        <wsdl:message name="GetCoursesInput">
+                <wsdl:part name="parameters" element="tns:GetCoursesRequest"/>
+        </wsdl:message>
+
+        <wsdl:message name="GetCoursesOutput">
+                <wsdl:part name="parameters" element="tns:GetCoursesResponse"/>
+        </wsdl:message>
+
+        <wsdl:message name="UpdateCourseInput">
+                <wsdl:part name="parameters" element="tns:UpdateCourseRequest"/>
+        </wsdl:message>
+
+        <wsdl:message name="UpdateCourseOutput">
+                <wsdl:part name="parameters" element="tns:UpdateCourseResponse"/>
+        </wsdl:message>
+
+        <wsdl:message name="CreateCourseInput">
+                <wsdl:part name="parameters" element="tns:CreateCourseRequest"/>
+        </wsdl:message>
+
+        <wsdl:message name="CreateCourseOutput">
+                <wsdl:part name="parameters" element="tns:CreateCourseResponse"/>
+        </wsdl:message>
+
+        <wsdl:message name="DeleteCourseByIdInput">
+                <wsdl:part name="parameters" element="tns:DeleteCourseByIdRequest"/>
+        </wsdl:message>
+
+        <wsdl:message name="DeleteCourseByIdOutput">
+                <wsdl:part name="parameters" element="tns:DeleteCourseByIdResponse"/>
+        </wsdl:message>
+
+        <wsdl:message name="SubscribeCourseByIdInput">
+                <wsdl:part name="parameters" element="tns:SubscribeCourseByIdRequest"/>
+        </wsdl:message>
+
+        <wsdl:message name="SubscribeCourseByIdOutput">
+                <wsdl:part name="parameters" element="tns:SubscribeCourseByIdResponse"/>
+        </wsdl:message>
+
+        <wsdl:message name="UnsubscribeCourseByIdInput">
+                <wsdl:part name="parameters" element="tns:UnsubscribeCourseByIdRequest"/>
+        </wsdl:message>
+
+        <wsdl:message name="UnsubscribeCourseByIdOutput">
+                <wsdl:part name="parameters" element="tns:UnsubscribeCourseByIdResponse"/>
+        </wsdl:message>
+
+        <wsdl:message name="GetStudentsInput">
+                <wsdl:part name="parameters" element="tns:GetStudentsRequest"/>
+        </wsdl:message>
+
+        <wsdl:message name="GetStudentsOutput">
+                <wsdl:part name="parameters" element="tns:GetStudentsResponse"/>
+        </wsdl:message>
+        
+        <wsdl:message name="GetUserByIdInput">
+                <wsdl:part name="parameters" element="tns:GetUserByIdRequest"/>
+        </wsdl:message>
+
+        <wsdl:message name="GetUserByIdOutput">
+                <wsdl:part name="parameters" element="tns:GetUserByIdResponse"/>
+        </wsdl:message>
+
+        <wsdl:message name="AuthUserInput">
+                <wsdl:part name="parameters" element="tns:AuthUserRequest"/>
+        </wsdl:message>
+
+        <wsdl:message name="AuthUserOutput">
+                <wsdl:part name="parameters" element="tns:AuthUserResponse"/>
+        </wsdl:message>
+
+        <wsdl:portType name="ScheduleManager">
+                <wsdl:operation name="GetCourses">
+                        <wsdl:input message="tns:GetCoursesInput"/>
+                        <wsdl:output message="tns:GetCoursesOutput"/>
+                </wsdl:operation>
+
+                <wsdl:operation name="UpdateCourse">
+                        <wsdl:input message="tns:UpdateCourseInput"/>
+                        <wsdl:output message="tns:UpdateCourseOutput"/>
+                </wsdl:operation>
+
+                <wsdl:operation name="CreateCourse">
+                        <wsdl:input message="tns:CreateCourseInput"/>
+                        <wsdl:output message="tns:CreateCourseOutput"/>
+                </wsdl:operation>
+
+                <wsdl:operation name="DeleteCourseById">
+                        <wsdl:input message="tns:DeleteCourseByIdInput"/>
+                        <wsdl:output message="tns:DeleteCourseByIdOutput"/>
+                </wsdl:operation>
+
+                <wsdl:operation name="SubscribeCourseById">
+                        <wsdl:input message="tns:SubscribeCourseByIdInput"/>
+                        <wsdl:output message="tns:SubscribeCourseByIdOutput"/>
+                </wsdl:operation>
+
+                <wsdl:operation name="UnsubscribeCourseById">
+                        <wsdl:input message="tns:UnsubscribeCourseByIdInput"/>
+                        <wsdl:output message="tns:UnsubscribeCourseByIdOutput"/>
+                </wsdl:operation>
+
+                <wsdl:operation name="GetStudents">
+                        <wsdl:input message="tns:GetStudentsInput"/>
+                        <wsdl:output message="tns:GetStudentsOutput"/>
+                </wsdl:operation>
+
+                <wsdl:operation name="GetUserById">
+                        <wsdl:input message="tns:GetUserByIdInput"/>
+                        <wsdl:output message="tns:GetUserByIdOutput"/>
+                </wsdl:operation>
+
+                <wsdl:operation name="AuthUser">
+                        <wsdl:input message="tns:AuthUserInput"/>
+                        <wsdl:output message="tns:AuthUserOutput"/>
+                </wsdl:operation>
+        </wsdl:portType>
+        
+        <wsdl:binding name="ScheduleManagerHttpBinding" type="tns:ScheduleManager">
+                <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+                <wsdl:operation name="GetCourses">
+                        <wsdlsoap:operation soapAction="http://schedule-manager.jit.su/GetCourses"/>
+                        <wsdl:input name="GetCoursesRequest">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:input>
+                        <wsdl:output name="GetCoursesResponse">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:output>
+                </wsdl:operation>
+
+                <wsdl:operation name="UpdateCourse">
+                        <wsdlsoap:operation soapAction="http://schedule-manager.jit.su/UpdateCourse"/>
+                        <wsdl:input name="UpdateCourseRequest">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:input>
+                        <wsdl:output name="UpdateCourseResponse">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:output>
+                </wsdl:operation>
+
+                <wsdl:operation name="CreateCourse">
+                        <wsdlsoap:operation soapAction="http://schedule-manager.jit.su/CreateCourse"/>
+                        <wsdl:input name="CreateCourseRequest">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:input>
+                        <wsdl:output name="CreateCourseResponse">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:output>
+                </wsdl:operation>
+
+                <wsdl:operation name="DeleteCourseById">
+                        <wsdlsoap:operation soapAction="http://schedule-manager.jit.su/DeleteCourseById"/>
+                        <wsdl:input name="DeleteCourseByIdRequest">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:input>
+                        <wsdl:output name="DeleteCourseByIdResponse">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:output>
+                </wsdl:operation>
+
+                <wsdl:operation name="SubscribeCourseById">
+                        <wsdlsoap:operation soapAction="http://schedule-manager.jit.su/SubscribeCourseById"/>
+                        <wsdl:input name="SubscribeCourseByIdRequest">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:input>
+                        <wsdl:output name="SubscribeCourseByIdResponse">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:output>
+                </wsdl:operation>
+
+                <wsdl:operation name="UnsubscribeCourseById">
+                        <wsdlsoap:operation soapAction="http://schedule-manager.jit.su/UnsubscribeCourseById"/>
+                        <wsdl:input name="UnsubscribeCourseByIdRequest">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:input>
+                        <wsdl:output name="UnsubscribeCourseByIdResponse">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:output>
+                </wsdl:operation>
+
+                <wsdl:operation name="GetStudents">
+                        <wsdlsoap:operation soapAction="http://schedule-manager.jit.su/GetStudents"/>
+                        <wsdl:input name="GetStudentsRequest">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:input>
+                        <wsdl:output name="GetStudentsResponse">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:output>
+                </wsdl:operation>
+
+                <wsdl:operation name="GetUserById">
+                        <wsdlsoap:operation soapAction="http://schedule-manager.jit.su/GetUserById"/>
+                        <wsdl:input name="GetUserByIdRequest">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:input>
+                        <wsdl:output name="GetUserByIdResponse">
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:output>
+                </wsdl:operation>
+
+                <wsdl:operation name="AuthUser">
+                        <wsdlsoap:operation soapAction="http://schedule-manager.jit.su/AuthUser"/>
+                        <wsdl:input>
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:input>
+                        <wsdl:output>
+                                <wsdlsoap:body use="literal"/>
+                        </wsdl:output>
+                </wsdl:operation>
+        </wsdl:binding>
+        
+        <wsdl:service name="ScheduleManager">
+                <wsdl:port name="ScheduleManagerHttpPort" binding="tns:ScheduleManagerHttpBinding">
+                        <wsdlsoap:address location="http://10.0.0.2:8000/ScheduleManager"/>
+                </wsdl:port>
+        </wsdl:service>
+</wsdl:definitions>

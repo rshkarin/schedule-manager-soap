@@ -1,0 +1,27 @@
+{
+  "subdomain": "schedule-manager-soap",
+  "scripts": {
+    "predeploy": "echo This will be run before deploying the app",
+    "postdeploy": "echo This will be run after deploying the app",
+    "start": "app.js"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "version": "0.0.1",
+  "private": "true",
+  "dependencies": {
+    "request": "*",
+    "mongoose": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "connect": "*",
+    "moment": "*",
+    "credential": "*",
+    "connect-mongo": "*",
+    "underscore": "*",
+    "mongoose-unique-validator": "*",
+    "soap": "*"
+  },
+  "name": "ScheduleManager"
+}
