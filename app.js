@@ -12,36 +12,48 @@
 
 
   var smService = {
-    ScheduleManager: {
+    ScheduleManagerService: {
       ScheduleManagerHttpPort: {
         AuthUser: function(args, callback) {
           User.findByLogin(args.username, function(err, found_user) {
             if (err) { 
-              return callback({ state: { statusCode: 403, errors: [err] }, header: null}); 
+              return callback({ state: { statusCode: 403, errors: [err] }, header: null, loggedUser: null}); 
             }
 
             if (!found_user) { 
-              return callback({ state: { statusCode: 403, errors: ['Unknown credentials!'] }, header: null});
+              return callback({ state: { statusCode: 403, errors: ['Unknown credentials!'] }, header: null, loggedUser: null});
             }
 
               pw.verify(found_user.password, args.password, function (err, isValid) {
                 if (err) {
-                    return callback({ state: { statusCode: 403, errors: [err] }, header: null}); 
+                    return callback({ state: { statusCode: 403, errors: [err] }, header: null, loggedUser: null}); 
                 }
 
                 if (!isValid) { 
-                    return callback({ state: { statusCode: 403, errors: ['Invalid password.'] }, header: null});
+                    return callback({ state: { statusCode: 403, errors: ['Invalid password.'] }, header: null, loggedUser: null});
                 }
 
-                Session.createSession(found_user._id.toString(), function(err, sessionEntry){
+                Session.createSession(found_user._id.toString(), function(err, sessionEntry) {
                   if (err) {
-                    return callback({ state: { statusCode: 403, errors: [err] }, header: null}); 
+                    return callback({ state: { statusCode: 403, errors: [err] }, header: null, loggedUser: null}); 
                   }
 
                   console.log(sessionEntry);
                   console.log(found_user);
 
-                  return callback({ state: { statusCode: 200, errors: null }, header: { sessionId: sessionEntry._id.toString() }});
+                  return callback({ state: { statusCode: 200, errors: null }, 
+                                    header: { sessionId: sessionEntry._id.toString() }, 
+                                    loggedUser: { 
+                                                  _id: found_user._id.toString(),
+                                                  firstName: found_user.firstName,
+                                                  lastName: found_user.lastName,
+                                                  birthDay: found_user.birthDay.toISOString(),
+                                                  degree: found_user.degree,
+                                                  universityName: found_user.universityName,
+                                                  groupNumber: found_user.groupNumber,
+                                                  personalId: found_user.personalId,
+                                                  userGroup: found_user.userGroup
+                                                }});
                 });
               });
           });  
@@ -53,24 +65,41 @@
               return callback({ state: { statusCode: 403, errors: [err] } });
             }
 
-            Course.findAll(function(err, courses) {
-              var courses_new = new Array();
-              for (var i = 0; i < courses.length; ++i) {
-                courses_new.push({ 
-                  _id: courses[i]._id.toString(),
-                  status: courses[i].status,
-                  title: courses[i].title,
-                  field: courses[i].field,
-                  description: courses[i].description,
-                  keyWords: courses[i].keyWords,
-                  professor: courses[i].professor,
-                  students: courses[i].students,
-                  startDate: courses[i].startDate.toISOString(),
-                  finishDate: courses[i].finishDate.toISOString()
-                });
+            User.findById(userId, function(err, user) {
+              var view_function = '',
+                  args = {};
+
+              var queryObj = new Object();
+
+              if (!user || user.userGroup == 'Student') {
+                  queryObj["status"] = new Object();
+                  queryObj["status"]["$ne"] = "None";
+              }
+              else if (user.userGroup == 'Professor') {
+                  queryObj["professor"] = user._id.toString();
+              }
+              else {
               }
 
-              return callback({ state: { statusCode: 200, errors: null }, courses: courses_new })
+              Course.findByObjQuery(queryObj, function(err, courses) {
+                var courses_new = new Array();
+                for (var i = 0; i < courses.length; ++i) {
+                  courses_new.push({ 
+                    _id: courses[i]._id.toString(),
+                    status: courses[i].status,
+                    title: courses[i].title,
+                    field: courses[i].field,
+                    description: courses[i].description,
+                    keyWords: courses[i].keyWords,
+                    professor: courses[i].professor,
+                    students: courses[i].students,
+                    startDate: courses[i].startDate.toISOString(),
+                    finishDate: courses[i].finishDate.toISOString()
+                  });
+                }
+
+                return callback({ state: { statusCode: 200, errors: null }, courses: courses_new })
+              });
             });
           });
         },
@@ -108,6 +137,7 @@
                                                        keyWords: args.course.keyWords,
                                                        startDate: new Date(args.course.startDate),
                                                        finishDate: new Date(args.course.finishDate)}, function(err) {
+                console.log(args.course.keyWords);
                 if (err) {
                   console.log(err);
                   return callback({ state: { statusCode: 500, errors: [err] } });
@@ -195,7 +225,7 @@
               return callback({ state: { statusCode: 403, errors: [err] } });
             }
 
-            Course.update({ _id: args.courseId }, { $push: { students: args.userId }  }, function(err) {
+            Course.update({ _id: args.courseId }, { $push: { students: userId }  }, function(err) {
               if (err) {
                 return callback({ state: { statusCode: 500, errors: [err] } });
               }
@@ -211,7 +241,7 @@
               return callback({ state: { statusCode: 403, errors: [err] } });
             }
 
-            Course.update({ _id: args.courseId }, { $pull: { students: args.userId }  }, function(err) {
+            Course.update({ _id: args.courseId }, { $pull: { students: userId }  }, function(err) {
               if (err) {
                 return callback({ state: { statusCode: 500, errors: [err] } });
               }

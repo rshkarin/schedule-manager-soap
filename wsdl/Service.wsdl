@@ -134,7 +134,6 @@
                         <xs:sequence>
                             <xs:element name="header" type="tns:SMHeader" nillable="true" minOccurs="1" maxOccurs="1"/>
                             <xs:element name="courseId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-                            <xs:element name="userId" type="xs:string" minOccurs="1" maxOccurs="1"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
@@ -153,7 +152,6 @@
                         <xs:sequence>
                             <xs:element name="header" type="tns:SMHeader" nillable="true" minOccurs="1" maxOccurs="1"/>
                             <xs:element name="courseId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-                            <xs:element name="userId" type="xs:string" minOccurs="1" maxOccurs="1"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
@@ -218,6 +216,7 @@
                         <xs:sequence>
                             <xs:element name="state" type="tns:State" minOccurs="1" maxOccurs="1"/>
                             <xs:element name="header" type="tns:SMHeader" nillable="true" minOccurs="1" maxOccurs="1"/>
+                            <xs:element name="loggedUser" type="tns:User" nillable="true" minOccurs="1" maxOccurs="1"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
@@ -296,7 +295,7 @@
                 <wsdl:part name="parameters" element="tns:AuthUserResponse"/>
         </wsdl:message>
 
-        <wsdl:portType name="ScheduleManager">
+        <wsdl:portType name="ScheduleManagerService">
                 <wsdl:operation name="GetCourses">
                         <wsdl:input message="tns:GetCoursesInput"/>
                         <wsdl:output message="tns:GetCoursesOutput"/>
@@ -343,7 +342,7 @@
                 </wsdl:operation>
         </wsdl:portType>
         
-        <wsdl:binding name="ScheduleManagerHttpBinding" type="tns:ScheduleManager">
+        <wsdl:binding name="ScheduleManagerHttpBinding" type="tns:ScheduleManagerService">
                 <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 
                 <wsdl:operation name="GetCourses">
@@ -437,7 +436,7 @@
                 </wsdl:operation>
         </wsdl:binding>
         
-        <wsdl:service name="ScheduleManager">
+        <wsdl:service name="ScheduleManagerService">
                 <wsdl:port name="ScheduleManagerHttpPort" binding="tns:ScheduleManagerHttpBinding">
                         <wsdlsoap:address location="http://10.0.0.2:8000/ScheduleManager"/>
                 </wsdl:port>
