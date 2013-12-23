@@ -438,7 +438,7 @@
         
         <wsdl:service name="ScheduleManagerService">
                 <wsdl:port name="ScheduleManagerHttpPort" binding="tns:ScheduleManagerHttpBinding">
-                        <wsdlsoap:address location="http://10.0.0.2:8000/ScheduleManager"/>
+                        <wsdlsoap:address location="http://schedule-manager-soap.jit.su/ScheduleManager"/>
                 </wsdl:port>
         </wsdl:service>
 </wsdl:definitions>
